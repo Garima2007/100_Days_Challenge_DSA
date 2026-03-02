@@ -20,46 +20,45 @@ Explanation: Among all possible pairs, the sum of -10 and 1 is -9, which is the 
 */
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
+#include <math.h>
 
-int compare(const void *a, const void *b) {
-    return (*(int*)a - *(int*)b);
+int compare(const void* a, const void* b) {
+    int x = *(const int*)a;
+    int y = *(const int*)b;
+    return x - y;
 }
 
 int main() {
     int n;
+    int arr[100];
+    
     scanf("%d", &n);
-
-    int arr[n];
-
-    for(int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++) {
         scanf("%d", &arr[i]);
     }
-
+    
     qsort(arr, n, sizeof(int), compare);
-
-    int left = 0;
-    int right = n - 1;
-
-    int min_sum = abs(arr[left] + arr[right]);
-    int min_left = left;
-    int min_right = right;
-
-    while(left < right) {
+    
+    int left = 0, right = n - 1;
+    int minSum = INT_MAX;
+    int resLeft = 0, resRight = 0;
+    
+    while (left < right) {
         int sum = arr[left] + arr[right];
-
-        if(abs(sum) < min_sum) {
-            min_sum = abs(sum);
-            min_left = left;
-            min_right = right;
+        
+        if (abs(sum) < abs(minSum)) {
+            minSum = sum;
+            resLeft = arr[left];
+            resRight = arr[right];
         }
-
-        if(sum < 0)
+        
+        if (sum < 0)
             left++;
         else
             right--;
     }
-
-    printf("%d %d", arr[min_left], arr[min_right]);
-
+    
+    printf("%d %d\n", resLeft, resRight);
     return 0;
 }
