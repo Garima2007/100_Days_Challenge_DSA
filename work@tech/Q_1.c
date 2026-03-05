@@ -13,7 +13,7 @@ void removeLoop(struct ListNode* list)
 {
     struct ListNode *slow = list, *fast = list;
 
-    while (fast != NULL && fast->next != NULL)
+    while (fast->next != NULL)
     {
         slow = slow->next;
         fast = fast->next->next;
