@@ -1,51 +1,76 @@
-/*
-Implement Heap Sort using a Max Heap to sort an array in ascending order. First build a max heap, then repeatedly extract the maximum element and place it at the end of the array.
-*/
+/* Problem Statement:
+Implement a Queue using a linked list supporting enqueue and dequeue operations.
+
+Input Format:
+- First line contains integer N
+- Next N lines contain queue operations
+
+Output Format:
+- Print dequeued elements
+- Print -1 if dequeue is attempted on an empty queue */
+
 #include <stdio.h>
+#include <stdlib.h>
+typedef struct Node {
+    int data;
+    struct Node* next;
+} Node;
 
-void swap(int *a, int *b) {
-    int temp = *a;
-    *a = *b;
-    *b = temp;
-}
+/* Queue structure */
+typedef struct myQueue {
+    int currSize;
+    Node* front;
+    Node* rear;
+} myQueue;
 
-void heapify(int arr[], int n, int i) {
-    int largest = i;
-    int left = 2 * i + 1;
-    int right = 2 * i + 2;
-
-    if (left < n && arr[left] > arr[largest])
-        largest = left;
-    if (right < n && arr[right] > arr[largest])
-        largest = right;
-
-    if (largest != i) {
-        swap(&arr[i], &arr[largest]);
-        heapify(arr, n, largest);
+Node* newNode(int data) {
+    Node* node = (Node*)malloc(sizeof(Node));
+    if (node == NULL) {
+        printf("Memory allocation failed\n");
+        exit(1);
     }
+    node->data = data;
+    node->next = NULL;
+    return node;
 }
 
-void heapSort(int arr[], int n) {
-    for (int i = n / 2 - 1; i >= 0; i--)
-        heapify(arr, n, i);
-
-    for (int i = n - 1; i > 0; i--) {
-        swap(&arr[0], &arr[i]);
-        heapify(arr, i, 0);
+myQueue* createQueue() {
+    myQueue* q = (myQueue*)malloc(sizeof(myQueue));
+    if (q == NULL) {
+        printf("Memory allocation failed\n");
+        exit(1);
     }
+    q->front = NULL;
+    q->rear = NULL;
+    q->currSize = 0;
+    return q;
 }
 
-int main() {
-    int n;
-    scanf("%d", &n);
-    int arr[n];
-    for (int i = 0; i < n; i++)
-        scanf("%d", &arr[i]);
+int isEmpty(myQueue* q) {
+    return q->front == NULL;
+}
 
-    heapSort(arr, n);
+void enqueue(myQueue* q, int data) {
+    Node* node = newNode(data);
+    if (isEmpty(q)) {
+        q->front = q->rear = node;
+    } else {
+        q->rear->next = node;
+        q->rear = node;
+    }
+    q->currSize++;
+}
 
-    for (int i = 0; i < n; i++)
-        printf("%d ", arr[i]);
-
-    return 0;
+int dequeue(myQueue* q) {
+    if (isEmpty(q)) {
+        return -1;
+    }
+    Node* temp = q->front;
+    int removedData = temp->data;
+    q->front = q->front->next;
+    if (q->front == NULL)
+        q->rear = NULL;
+    free(temp);
+    q->currSize--;
+    return removedData;
 }
