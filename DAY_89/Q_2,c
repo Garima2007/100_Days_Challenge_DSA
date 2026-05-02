@@ -1,0 +1,44 @@
+/*
+Constraints:
+
+1 <= days <= weights.length <= 5 * 104
+1 <= weights[i] <= 500
+*/
+int canShip(int* weights, int n, int days, int cap) {
+    int d = 1, load = 0;
+
+    for (int i = 0; i < n; i++) {
+        if (load + weights[i] <= cap) {
+            load += weights[i];
+        } else {
+            d++;
+            load = weights[i];
+        }
+    }
+
+    return d <= days;
+}
+
+int shipWithinDays(int* weights, int weightsSize, int days) {
+    int maxW = 0, sum = 0;
+
+    for (int i = 0; i < weightsSize; i++) {
+        if (weights[i] > maxW) maxW = weights[i];
+        sum += weights[i];
+    }
+
+    int low = maxW, high = sum, ans = sum;
+
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+
+        if (canShip(weights, weightsSize, days, mid)) {
+            ans = mid;
+            high = mid - 1;
+        } else {
+            low = mid + 1;
+        }
+    }
+
+    return ans;
+}
