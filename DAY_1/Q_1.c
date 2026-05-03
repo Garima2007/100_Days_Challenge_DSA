@@ -28,7 +28,7 @@ int main ()
 {
 int arr[10] = {10, 20, 30 ,40, 50};
 int n = 5, a = 3, value = 25;
-for(int i = n; i > a; i--)
+for(int i = n; i >= a; i--)
 {
 arr[i] = arr[i - 1];
 }
